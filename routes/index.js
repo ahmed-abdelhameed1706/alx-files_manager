@@ -6,6 +6,7 @@ const express = require('express');
 const router = express.Router();
 
 router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 router.get('/status', getStatus);
 router.get('/stats', getStats);
