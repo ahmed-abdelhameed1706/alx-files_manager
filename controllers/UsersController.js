@@ -1,5 +1,5 @@
-import bcrypt from "bcrypt";
-import dbClient from "../utils/db";
+import bcrypt from 'bcrypt';
+import dbClient from '../utils/db';
 
 const hashPassword = async (password) => {
   const saltRounds = 10;
@@ -9,19 +9,19 @@ const hashPassword = async (password) => {
 export const postNew = async (req, res) => {
   const { email, password } = req.body;
   if (!email) {
-    return res.status(400).send({ error: "Missing email" });
+    return res.status(400).send({ error: 'Missing email' });
   }
   if (!password) {
-    return res.status(400).send({ error: "Missing password" });
+    return res.status(400).send({ error: 'Missing password' });
   }
   const user = await dbClient.users.findOne({ email });
   if (user) {
-    return res.status(400).send({ error: "Already exist" });
+    return res.status(400).send({ error: 'Already exist' });
   }
 
   const hashedPassword = await hashPassword(password);
   const newUser = await dbClient.users.insertOne({
-    email: email,
+    email,
     password: hashedPassword,
   });
   const newUserData = {
