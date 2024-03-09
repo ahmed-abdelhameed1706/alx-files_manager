@@ -26,4 +26,4 @@ const postNew = async (req, res) => {
   return res.status(201).send(newUserData);
 };
 
-module.exports = { postNew };
+export default postNew;
