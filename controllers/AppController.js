@@ -1,7 +1,7 @@
-import dbClient from '../utils/db';
-import redisClient from '../utils/redis';
+import dbClient from "../utils/db";
+import redisClient from "../utils/redis";
 
-export const getStatus = async (req, res) => {
+export const getStatus = (req, res) => {
   const status = {
     redis: redisClient.isAlive(),
     db: dbClient.isAlive(),
