@@ -1,12 +1,7 @@
-import bcrypt from 'bcrypt';
+import sha1 from 'sha1';
 import dbClient from '../utils/db';
 
-const hashPassword = async (password) => {
-  const saltRounds = 10;
-  return bcrypt.hash(password, saltRounds);
-};
-
-export const postNew = async (req, res) => {
+const postNew = async (req, res) => {
   const { email, password } = req.body;
   if (!email) {
     return res.status(400).send({ error: 'Missing email' });
@@ -19,7 +14,7 @@ export const postNew = async (req, res) => {
     return res.status(400).send({ error: 'Already exist' });
   }
 
-  const hashedPassword = await hashPassword(password);
+  const hashedPassword = sha1(password);
   const newUser = await dbClient.users.insertOne({
     email,
     password: hashedPassword,
@@ -31,4 +26,4 @@ export const postNew = async (req, res) => {
   return res.status(201).send(newUserData);
 };
 
-export const getMe = async () => {};
+module.exports = { postNew };
