@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
 class DBClient {
-  constructor () {
+  constructor() {
     this.host = process.env.DB_HOST || 'localhost';
     this.port = process.env.DB_PORT || 27017;
     this.dbName = process.env.DB_DATABASE || 'file_manager';
@@ -20,16 +20,16 @@ class DBClient {
     });
   }
 
-  isAlive () {
+  isAlive() {
     return !!this.db;
   }
 
-  async nbUsers () {
-    return await this.users.countDocuments();
+  async nbUsers() {
+    return this.users.countDocuments();
   }
 
-  async nbFiles () {
-    return await this.files.countDocuments();
+  async nbFiles() {
+    return this.files.countDocuments();
   }
 }
 
