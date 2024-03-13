@@ -29,7 +29,7 @@ export const postNew = async (req, res) => {
 };
 
 export const getMe = async (req, res) => {
-  const token = req.headers['X-Token'];
+  const token = req.header('X-Token');
 
   if (!token) {
     return res.status(401).send('Unauthorized');
@@ -41,8 +41,9 @@ export const getMe = async (req, res) => {
   const user = await dbClient.users.findOne({ _id: ObjectId(userId) });
 
   if (!user) {
-    return res.status(401).send('Unauthorized');
+    return res.status(401).send({ error: 'Unauthorized' });
   }
 
   return res.status(200).send({ id: user._id, email: user.email });
 };
+// curl 0.0.0.0:5000/users/me -H "X-Token: 5fd19349-6099-48c1-bf3f-155bdb7c6fe5" ; echo ""

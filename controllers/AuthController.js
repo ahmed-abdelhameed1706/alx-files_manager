@@ -24,13 +24,13 @@ export const getConnect = async (req, res) => {
 
   const token = v4();
   const key = `auth_${token}`;
-  redisClient.set(key, user._id.toString(), 'EX', 86400);
-
+  await redisClient.set(key, user._id.toString(), 86400);
+  console.log(`Welcome to the dashboard ${user.email}`);
   return res.status(200).send({ token });
 };
 
 export const getDisconnect = async (req, res) => {
-  const token = req.headers['X-Token'];
+  const token = req.header('X-Token');
   const key = `auth_${token}`;
 
   const userId = await redisClient.get(key);
