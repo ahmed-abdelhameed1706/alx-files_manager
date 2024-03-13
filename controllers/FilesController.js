@@ -50,7 +50,7 @@ const postUpload = async (req, res) => {
       name,
       type,
       isPublic,
-      parentId: parentId || 0,
+      parentId: ObjectId(parentId) || 0,
     });
     return res.status(201).send({
       id: newFolder.insertedId,
@@ -73,7 +73,7 @@ const postUpload = async (req, res) => {
     name,
     type,
     isPublic,
-    parentId: parentId || 0,
+    parentId: ObjectId(parentId) || 0,
     localPath: filePath,
   });
   return res.status(201).send({
