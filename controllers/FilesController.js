@@ -23,25 +23,25 @@ const postUpload = async (req, res) => {
   } = req.body;
 
   if (!name) {
-    return res.status(400).send('Missing name');
+    return res.status(400).send({ error: 'Missing name' });
   }
 
   if (!type || (type !== 'folder' && type !== 'file' && type !== 'image')) {
-    return res.status(400).send('Missing type');
+    return res.status(400).send({ error: 'Missing type' });
   }
 
   if (type !== 'folder' && !data) {
-    return res.status(400).send('Missing data');
+    return res.status(400).send({ error: 'Missing data' });
   }
 
   if (parentId) {
     const parent = await dbClient.files.findOne({ _id: ObjectId(parentId) });
     if (!parent) {
-      return res.status(400).send('Parent not found');
+      return res.status(400).send({ error: 'Parent not found' });
     }
 
     if (parent.type !== 'folder') {
-      return res.status(400).send('Parent is not a folder');
+      return res.status(400).send({ error: 'Parent is not a folder' });
     }
   }
   if (type === 'folder') {
@@ -50,7 +50,7 @@ const postUpload = async (req, res) => {
       name,
       type,
       isPublic,
-      parentId: ObjectId(parentId) || 0,
+      parentId: parentId || 0,
     });
     return res.status(201).send({
       id: newFolder.insertedId,
@@ -73,7 +73,7 @@ const postUpload = async (req, res) => {
     name,
     type,
     isPublic,
-    parentId: ObjectId(parentId) || 0,
+    parentId: parentId || 0,
     localPath: filePath,
   });
   return res.status(201).send({
