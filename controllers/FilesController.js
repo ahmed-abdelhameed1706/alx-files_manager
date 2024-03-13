@@ -50,7 +50,7 @@ export const postUpload = async (req, res) => {
       name,
       type,
       isPublic,
-      parentId: parentId || 0,
+      parentId: ObjectId(parentId) || 0,
     });
     return res.status(201).send({
       id: newFolder.insertedId,
@@ -73,7 +73,7 @@ export const postUpload = async (req, res) => {
     name,
     type,
     isPublic,
-    parentId: parentId || 0,
+    parentId: ObjectId(parentId) || 0,
     localPath: filePath,
   });
   return res.status(201).send({
@@ -102,13 +102,12 @@ export const getShow = async (req, res) => {
   }
   const fileId = req.params.id;
 
-  const file = await dbClient.files.findOne({ _id: ObjectId(fileId) });
+  const file = await dbClient.files.findOne({
+    _id: ObjectId(fileId),
+    userId: ObjectId(userId),
+  });
 
   if (!file) {
-    return res.status(404).send({ error: 'Not found' });
-  }
-
-  if (file.userId.toString() !== userId) {
     return res.status(404).send({ error: 'Not found' });
   }
 
@@ -143,6 +142,13 @@ export const getIndex = async (req, res) => {
       { $limit: 20 },
     ])
     .toArray();
-  return res.status(200).send(files);
+  const filesArray = files.map((file) => ({
+    id: file._id,
+    userId: file.userId,
+    name: file.name,
+    type: file.type,
+    isPublic: file.isPublic,
+    parentId: file.parentId,
+  }));
+  return res.status(200).send(filesArray);
 };
-// curl -XGET 0.0.0.0:5000/files -H "X-Token: 25c94fb2-81e7-44ae-8e20-fe2eae0c5fe2" ; echo ""
