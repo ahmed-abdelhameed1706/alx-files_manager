@@ -58,7 +58,7 @@ export const postUpload = async (req, res) => {
       name,
       type,
       isPublic,
-      parentId: ObjectId(parentId) || 0,
+      parentId: parentId || 0,
     });
   }
   const folderPath = process.env.FOLDER_PATH || '/tmp/files_manager';
@@ -82,7 +82,7 @@ export const postUpload = async (req, res) => {
     name,
     type,
     isPublic,
-    parentId: ObjectId(parentId) || 0,
+    parentId: parentId || 0,
   });
 };
 
@@ -142,6 +142,7 @@ export const getIndex = async (req, res) => {
       { $limit: 20 },
     ])
     .toArray();
+
   const filesArray = files.map((file) => ({
     id: file._id,
     userId: file.userId,
