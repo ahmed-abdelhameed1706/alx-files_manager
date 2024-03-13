@@ -9,7 +9,7 @@ export const getConnect = async (req, res) => {
   const encrypted = req.headers.authorization.split(" ")[1];
 
   if (!encrypted) {
-    return res.status(401).send("Unauthorized");
+    return res.status(401).send({ error: "Unauthorized" });
   }
 
   const decrypted = decrypt64(encrypted);
@@ -19,7 +19,7 @@ export const getConnect = async (req, res) => {
   const user = await dbClient.users.findOne({ email });
 
   if (!user || user.password !== sha1(password)) {
-    return res.status(401).send("Unauthorized");
+    return res.status(401).send({ error: "Unauthorized" });
   }
 
   const token = v4();
