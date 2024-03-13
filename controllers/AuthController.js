@@ -24,7 +24,7 @@ export const getConnect = async (req, res) => {
 
   const token = v4();
   const key = `auth_${token}`;
-  await redisClient.set(key, user._id.toString(), 86400);
+  redisClient.set(key, user._id.toString(), 86400);
   console.log(`Welcome to the dashboard ${user.email}`);
   return res.status(200).send({ token });
 };

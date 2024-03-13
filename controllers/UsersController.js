@@ -46,4 +46,3 @@ export const getMe = async (req, res) => {
 
   return res.status(200).send({ id: user._id, email: user.email });
 };
-// curl 0.0.0.0:5000/users/me -H "X-Token: 5fd19349-6099-48c1-bf3f-155bdb7c6fe5" ; echo ""
