@@ -1,23 +1,25 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient } from "mongodb";
 
 class DBClient {
   constructor() {
-    this.host = process.env.DB_HOST || 'localhost';
+    this.host = process.env.DB_HOST || "localhost";
     this.port = process.env.DB_PORT || 27017;
-    this.dbName = process.env.DB_DATABASE || 'file_manager';
+    this.dbName = process.env.DB_DATABASE || "file_manager";
     this.url = `mongodb://${this.host}:${this.port}`;
-    this.client = new MongoClient(this.url, { useUnifiedTopology: true });
-    this.db = null;
 
-    this.client.connect((err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        this.db = this.client.db(this.dbName);
-        this.users = this.db.collection('users');
-        this.files = this.db.collection('files');
+    MongoClient.connect(
+      this.url,
+      { useUnifiedTopology: true },
+      (err, client) => {
+        if (!err) {
+          this.db = client.db(this.dbName);
+          this.users = this.db.collection("users");
+          this.files = this.db.collection("files");
+        } else {
+          this.db = null;
+        }
       }
-    });
+    );
   }
 
   isAlive() {
